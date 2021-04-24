@@ -1,6 +1,8 @@
 import shortid from "shortid";
 import { Component } from "react";
 import styles from "./FormPhonebook.module.css";
+import { connect} from "react-redux";
+import * as actions from "../../Redux/Phone/phone-actions"
 class FormPhonebook extends Component {
   state = {
     name: "",
@@ -58,4 +60,11 @@ class FormPhonebook extends Component {
     );
   }
 }
-export default FormPhonebook;
+const mapDispatchToProps = (dispatch) => {
+  return{ onSubmit:({ name, number })=>dispatch(actions.addContact({ name, number })),
+  // onFilter:()=>dispatch(actions.filterChange()),
+  // onDeleteContact:(id)=>dispatch(actions.deleteContact(id)),
+  }
+ 
+ };
+export default connect(null,mapDispatchToProps)(FormPhonebook);

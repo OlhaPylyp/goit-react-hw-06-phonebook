@@ -1,5 +1,7 @@
 import styles from "./ContactItem.module.css";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import * as actions from "../../Redux/Phone/phone-actions";
 
 const ContactItem = ({ onDeleteContact, contacts }) => (
   <div>
@@ -34,4 +36,19 @@ ContactItem.propTypes = {
     })
   ).isRequired,
 };
-export default ContactItem;
+const getFilter = (allContacts, filter) => {
+  const normalizedFilter = filter.toLowerCase();
+  return allContacts.filter(({ name }) =>
+    name.toLowerCase().includes(normalizedFilter)
+  );
+};
+
+const mapStateToProps = ({ contacts: { items, filter } }) => ({
+  contacts: getFilter(items, filter),
+});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onDeleteContact: (id) => dispatch(actions.deleteContact(id)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ContactItem);

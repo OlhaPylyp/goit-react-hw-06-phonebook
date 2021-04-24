@@ -1,27 +1,11 @@
-import { createStore } from "redux";
-const contacts = {
-  items: [],
-  filter: "",
-  };
-const reducer = (state = contacts, { type, payload }) => {
-  switch (type) {
-    case "phoneBook/AddContact":
-      return {
-        ...state,
-        items: [payload, ...state.items],
-      };
+import { createStore, combineReducers } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import contactsReducer from "./Phone/phone-reducer";
 
-    case "phoneBook/FilterChange":
-      return { filter: payload };
-    case "phoneBook/DeleteContact":
-      return { items: state.items.filter(({ id }) => id !== payload) };
-    default:
-      return state;
-  }
-};
+const rootReducer = combineReducers({
+  contacts: contactsReducer,
+});
 
-const store = createStore(reducer);
-// const state ={
-//
-//   }
+const store = createStore(rootReducer, composeWithDevTools());
+
 export default store;
