@@ -60,12 +60,5 @@ function App({ items, filter, onAddContact }) {
     </div>
   );
 }
-const mapStateToProps = (state, props) => {
-  return { filter: state.filter };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // onAddContact:({ name, number })=>dispatch(actions.addContact({ name, number })),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+export default App

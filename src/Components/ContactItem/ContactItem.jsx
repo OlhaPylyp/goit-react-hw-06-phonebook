@@ -42,7 +42,6 @@ const getFilter = (allContacts, filter) => {
     name.toLowerCase().includes(normalizedFilter)
   );
 };
-
 const mapStateToProps = ({ contacts: { items, filter } }) => ({
   contacts: getFilter(items, filter),
 });

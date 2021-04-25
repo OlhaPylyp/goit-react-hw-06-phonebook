@@ -1,8 +1,8 @@
 import shortid from "shortid";
 import { Component } from "react";
 import styles from "./FormPhonebook.module.css";
-import { connect} from "react-redux";
-import * as actions from "../../Redux/Phone/phone-actions"
+import { connect } from "react-redux";
+import * as actions from "../../Redux/Phone/phone-actions";
 class FormPhonebook extends Component {
   state = {
     name: "",
@@ -16,9 +16,22 @@ class FormPhonebook extends Component {
   };
   handleSubmit = (e) => {
     e.preventDefault();
+
+    const sameName = this.props.items.some(
+      (item) => item.name === this.state.name
+    );
+    if (sameName) {
+      window.alert(
+        `LocalHost:3000 says ${this.state.name} is already in contact`
+      );
+      this.reset();
+      return;
+    }
     this.props.onSubmit(this.state);
-    this.setState({ name: "", number: "" });
-    // console.log(this.props);
+    this.reset();
+  };
+  reset = () => {
+    return this.setState({ name: "", number: "" });
   };
 
   render() {
@@ -60,11 +73,15 @@ class FormPhonebook extends Component {
     );
   }
 }
+const mapStateToProps = ({ contacts: { items } }) => {
+  return {
+    items,
+  };
+};
 const mapDispatchToProps = (dispatch) => {
-  return{ onSubmit:({ name, number })=>dispatch(actions.addContact({ name, number })),
-  // onFilter:()=>dispatch(actions.filterChange()),
-  // onDeleteContact:(id)=>dispatch(actions.deleteContact(id)),
-  }
- 
- };
-export default connect(null,mapDispatchToProps)(FormPhonebook);
+  return {
+    onSubmit: ({ name, number }) =>
+      dispatch(actions.addContact({ name, number })),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(FormPhonebook);
