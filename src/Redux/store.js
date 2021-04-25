@@ -16,6 +16,7 @@ import contactsReducer from "./Phone/phone-reducer";
 const persistConfig = {
   key: "phoneBooks",
   storage,
+  blacklist:["filter"],
 };
 const middleware = [
   ...getDefaultMiddleware({
