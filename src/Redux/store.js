@@ -9,11 +9,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import {
-  configureStore,
-  getDefaultMiddleware,
-  combineReducers,
-} from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 import contactsReducer from "./Phone/phone-reducer";
 
@@ -21,11 +17,14 @@ const persistConfig = {
   key: "phoneBooks",
   storage,
 };
-const middleware = [...getDefaultMiddleware({
-  serializableCheck: {
-    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-  },
-}), logger];
+const middleware = [
+  ...getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
+  logger,
+];
 // const rootReducer = combineReducers({ contacts: contactsReducer });
 
 // const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -38,6 +37,6 @@ const store = configureStore({
   devTools: process.env.NODE_ENV === "development",
 });
 
-const persistor = persistStore(store)
+const persistor = persistStore(store);
 // eslint-disable-next-line
 export default { store, persistor };
