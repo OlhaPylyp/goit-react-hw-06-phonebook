@@ -1,11 +1,43 @@
-import { createStore, combineReducers } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import {
+  configureStore,
+  getDefaultMiddleware,
+  combineReducers,
+} from "@reduxjs/toolkit";
+import logger from "redux-logger";
 import contactsReducer from "./Phone/phone-reducer";
 
-const rootReducer = combineReducers({
-  contacts: contactsReducer,
+const persistConfig = {
+  key: "phoneBooks",
+  storage,
+};
+const middleware = [...getDefaultMiddleware({
+  serializableCheck: {
+    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+  },
+}), logger];
+// const rootReducer = combineReducers({ contacts: contactsReducer });
+
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const store = configureStore({
+  reducer: {
+    contacts: persistReducer(persistConfig, contactsReducer),
+  },
+  middleware,
+  devTools: process.env.NODE_ENV === "development",
 });
 
-const store = createStore(rootReducer, composeWithDevTools());
-
-export default store;
+const persistor = persistStore(store)
+// eslint-disable-next-line
+export default { store, persistor };
